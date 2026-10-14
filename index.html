@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>HostelMate — Attendant Dashboard</title>
+<style>
+:root{--ink:#172b4d;--muted:#6b7890;--bg:#f4f7fb;--line:#e5ebf3;--blue:#3559e0;--teal:#12a594;--white:#fff;--orange:#f59e0b;--red:#e05252}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+.shell{display:grid;grid-template-columns:235px 1fr;min-height:100vh}.side{background:#172846;color:#eaf0ff;padding:28px 18px;display:flex;flex-direction:column;gap:25px}
+.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;letter-spacing:-.4px}.logo{display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:#4968ee;color:white;font-size:20px}
+.nav{display:grid;gap:7px}.nav button{border:0;background:transparent;color:#bac7df;text-align:left;padding:12px 13px;border-radius:10px;font:inherit;cursor:pointer}.nav button.active,.nav button:hover{background:#2a3e61;color:#fff}.side-note{margin-top:auto;color:#9eacc5;font-size:12px;line-height:1.6}
+main{padding:28px clamp(16px,3vw,38px);min-width:0}.top{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:26px}.eyebrow{color:var(--muted);font-size:13px;margin-bottom:5px}.top h1{font-size:27px;letter-spacing:-.8px;margin:0}.date{color:var(--muted);font-size:13px;background:white;border:1px solid var(--line);padding:10px 13px;border-radius:10px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:22px}.stat,.panel{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:0 5px 20px #17284608}.stat{padding:19px}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:13px}.stat-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#edf1ff;color:var(--blue);font-size:17px}.number{font-size:29px;font-weight:800;letter-spacing:-1px;margin:15px 0 4px}.sub{font-size:12px;color:var(--muted)}.content{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(300px,.85fr);gap:18px;align-items:start}.panel{padding:21px;margin-bottom:18px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.panel h2{font-size:16px;margin:0}.small{font-size:12px;color:var(--muted)}.pill{border-radius:20px;padding:5px 9px;font-size:11px;font-weight:700;display:inline-block}.green{background:#e5f8f1;color:#087c61}.amber{background:#fff4dc;color:#9b6400}.blue{background:#edf1ff;color:#3559e0}.red{background:#ffebeb;color:#b72e38}
+table{border-collapse:collapse;width:100%;font-size:13px}th{text-align:left;color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:0 8px 12px}td{padding:13px 8px;border-top:1px solid var(--line)}td:first-child{font-weight:700}.room{white-space:nowrap}
+.action-list{display:grid;gap:11px}.action{display:flex;align-items:flex-start;gap:11px;padding:12px;border:1px solid var(--line);border-radius:12px}.dot{width:9px;height:9px;border-radius:50%;margin-top:5px;flex-shrink:0}.action strong{display:block;font-size:13px;margin-bottom:4px}.action p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+.btn{border:0;background:var(--blue);color:white;border-radius:10px;padding:10px 13px;font-weight:700;font-size:12px;cursor:pointer}.btn.secondary{background:#eef2ff;color:#3559e0}.btn:hover{filter:brightness(.97)}.btnrow{display:flex;gap:8px;flex-wrap:wrap}
+.assistant{background:linear-gradient(135deg,#eef2ff,#f7f9ff);border:1px solid #dfe6ff}.ai-title{display:flex;align-items:center;gap:10px;margin-bottom:8px}.spark{display:grid;place-items:center;width:35px;height:35px;background:#dfe6ff;border-radius:11px;color:#3559e0;font-size:19px}.assistant p{font-size:13px;color:#5e6e8b;line-height:1.5;margin:0 0 14px}.chatlog{display:grid;gap:10px;max-height:260px;overflow:auto;margin:12px 0}.bubble{font-size:13px;line-height:1.55;padding:11px 12px;border-radius:12px;white-space:pre-wrap}.bubble.bot{background:white;border:1px solid #e3e8f4}.bubble.user{background:#3559e0;color:white;margin-left:18px}.chatform{display:flex;gap:8px}.chatform input{width:100%;min-width:0;border:1px solid #d8e0ee;background:white;padding:11px 12px;border-radius:10px;font:inherit;font-size:13px;outline-color:#9eafff}.quick{display:flex;gap:6px;flex-wrap:wrap;margin-top:11px}.quick button{border:1px solid #d9e2fa;color:#3b56ac;background:#fff;border-radius:20px;padding:6px 9px;font-size:11px;cursor:pointer}.hidden{display:none}.section{display:none}.section.active{display:block}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px;font-size:12px;color:var(--muted)}.field input,.field select,.field textarea{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit;color:var(--ink);background:white}.field.full{grid-column:1/-1}.notice{font-size:12px;color:var(--muted);line-height:1.6;padding:12px;border-radius:10px;background:#f7f9fc;border:1px solid var(--line)}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content{grid-template-columns:1fr}.shell{grid-template-columns:190px 1fr}}
+@media(max-width:650px){.shell{grid-template-columns:1fr}.side{padding:14px;gap:12px}.nav{grid-template-columns:repeat(4,minmax(0,1fr))}.nav button{text-align:center;padding:9px 3px;font-size:11px}.side-note{display:none}main{padding:20px 13px}.top{align-items:flex-start;flex-direction:column}.top h1{font-size:23px}.stats{gap:9px}.stat{padding:14px}.number{font-size:25px}.panel{padding:15px;overflow:auto}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}table{min-width:430px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <div class="brand"><div class="logo">⌂</div><span>HostelMate</span></div>
+  <nav class="nav">
+    <button class="active" data-section="overview">▦ &nbsp; Overview</button>
+    <button data-section="rooms">▤ &nbsp; Rooms</button>
+    <button data-section="maintenance">⚒ &nbsp; Maintenance</button>
+    <button data-section="assistant">✦ &nbsp; AI Assistant</button>
+  </nav>
+  <div class="side-note">HOSTEL OPERATIONS<br>Keep every stay running smoothly.<br><br>Prototype dashboard · Demo data</div>
+</aside>
+<main>
+  <div class="top"><div><div class="eyebrow">HOSTEL OPERATIONS / <span id="sectionName">OVERVIEW</span></div><h1 id="pageTitle">Good morning, attendant 👋</h1></div><div class="date" id="today"></div></div>
+  <section id="overview" class="section active">
+    <div class="stats">
+      <div class="stat"><div class="stat-top">Total rooms <span class="stat-icon">▦</span></div><div class="number" id="totalRooms">48</div><div class="sub">Across all blocks</div></div>
+      <div class="stat"><div class="stat-top">Occupied rooms <span class="stat-icon">⌂</span></div><div class="number" id="occupiedRooms">36</div><div class="sub"><span class="pill green" id="occupancy">75% occupied</span></div></div>
+      <div class="stat"><div class="stat-top">Available rooms <span class="stat-icon">✓</span></div><div class="number" id="availableRooms">12</div><div class="sub">Ready for allocation</div></div>
+      <div class="stat"><div class="stat-top">Open issues <span class="stat-icon">⚒</span></div><div class="number" id="openIssues">4</div><div class="sub">Maintenance requests</div></div>
+    </div>
+    <div class="content">
+      <div>
+        <div class="panel">
+          <div class="panel-head"><div><h2>Room overview</h2><div class="small">Sample hostel room status</div></div><button class="btn secondary" onclick="showSection('rooms')">Manage rooms ↗</button></div>
+          <table><thead><tr><th>Room</th><th>Resident</th><th>Status</th><th>Block</th></tr></thead><tbody id="roomRows"></tbody></table>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div><h2>Today's checklist</h2><div class="small">Tap items as you complete them</div></div><span class="pill blue" id="checkCount">0/4 done</span></div>
+          <div class="action-list" id="checklist"></div>
+        </div>
+      </div>
+      <div>
+        <div class="panel assistant">
+          <div class="ai-title"><div class="spark">✦</div><div><h2>HostelMate AI</h2><div class="small">Your operations helper</div></div></div>
+          <p>Draft notices, plan cleaning, prepare check-in lists, or get help with maintenance reports.</p>
+          <div class="btnrow"><button class="btn" onclick="showSection('assistant')">Ask AI assistant</button><button class="btn secondary" onclick="quickPrompt('Create a morning hostel attendant checklist.')">Morning checklist</button></div>
+        </div>
+        <div class="panel"><div class="panel-head"><h2>Recent activity</h2><span class="small">Today</span></div><div class="action-list" id="activityList"></div></div>
+        <div class="panel"><div class="panel-head"><h2>Quick actions</h2></div><div class="btnrow"><button class="btn secondary" onclick="showSection('rooms')">＋ Update room status</button><button class="btn secondary" onclick="showSection('maintenance')">＋ Log maintenance</button></div></div>
+      </div>
+    </div>
+  </section>
+  <section id="rooms" class="section">
+    <div class="panel"><div class="panel-head"><div><h2>Room management</h2><div class="small">Update demo room records locally in this browser</div></div><button class="btn" onclick="addRoom()">＋ Add room</button></div>
+    <table><thead><tr><th>Room</th><th>Resident</th><th>Status</th><th>Block</th><th>Action</th></tr></thead><tbody id="allRoomRows"></tbody></table>
+    <p class="notice">This prototype stores changes only in the current page session. Connect a database and add staff authentication before using real resident records.</p></div>
+  </section>
+  <section id="maintenance" class="section">
+    <div class="panel"><div class="panel-head"><div><h2>Maintenance requests</h2><div class="small">Record and track hostel issues</div></div></div>
+    <form id="maintenanceForm" class="formgrid">
+      <label class="field">Room / location<input name="location" required placeholder="e.g. Block B, Room 12"></label>
+      <label class="field">Priority<select name="priority"><option>Normal</option><option>High</option><option>Urgent</option></select></label>
+      <label class="field full">Issue description<textarea name="description" required rows="3" placeholder="Describe the problem…"></textarea></label>
+      <div class="field full"><button class="btn" type="submit">Log request</button></div>
+    </form><div style="height:18px"></div><div class="action-list" id="maintenanceList"></div>
+    </div>
+  </section>
+  <section id="assistant" class="section">
+    <div class="panel assistant"><div class="ai-title"><div class="spark">✦</div><div><h2>HostelMate AI assistant</h2><div class="small">Practical support for your daily duties</div></div></div><p>Ask for a notice, a cleaning rota, a checklist, a resident message, or a maintenance report.</p>
+      <div class="chatlog" id="chatlog"><div class="bubble bot">Hello! I’m HostelMate. What hostel task can I help you with today?</div></div>
+      <form class="chatform" id="chatform"><input id="chatInput" placeholder="e.g. Draft a notice about water supply…" autocomplete="off" required><button class="btn" type="submit">Send ↗</button></form>
+      <div class="quick"><button onclick="quickPrompt('Draft a polite notice reminding residents to keep shared areas clean.')">Cleanliness notice</button><button onclick="quickPrompt('Create a weekly cleaning rota for a hostel.')">Cleaning rota</button><button onclick="quickPrompt('Give me a student check-in checklist.')">Check-in checklist</button><button onclick="quickPrompt('Help me write a maintenance report for a leaking tap.')">Maintenance report</button></div>
+      <p id="aiStatus" class="small" style="margin-top:12px">AI requires an OpenAI API key configured on the server.</p>
+    </div>
+    <div class="notice">Privacy tip: do not enter passwords, payment-card details, sensitive identity documents, or unnecessary private resident information into the AI chat.</div>
+  </section>
+</main>
+</div>
+<script>
+const rooms = [
+ {room:"A-01",resident:"Ada Okafor",status:"Occupied",block:"A"},
+ {room:"A-02",resident:"Chinedu Eze",status:"Occupied",block:"A"},
+ {room:"A-03",resident:"—",status:"Available",block:"A"},
+ {room:"B-01",resident:"Fatima Bello",status:"Occupied",block:"B"},
+ {room:"B-02",resident:"—",status:"Cleaning",block:"B"},
+ {room:"B-03",resident:"Tunde Ayo",status:"Occupied",block:"B"}
+];
+let maintenance = [
+ {location:"Block A · Room 08",priority:"High",description:"Leaking bathroom tap",status:"Open"},
+ {location:"Common room",priority:"Normal",description:"Replace ceiling light",status:"Open"},
+ {location:"Block B · Stairwell",priority:"Urgent",description:"Loose handrail — inspect for safety",status:"Open"},
+ {location:"Block C · Room 14",priority:"Normal",description:"Door lock sticking",status:"Open"}
+];
+const tasks = [
+ ["Inspect common areas","Check corridors, washrooms, and shared spaces."],
+ ["Confirm room readiness","Review rooms due for check-in or cleaning."],
+ ["Check maintenance log","Follow up on open or urgent repair requests."],
+ ["Review supplies","Check soap, cleaning items, and basic supplies."]
+];
+let completed = new Set();
+const $ = id => document.getElementById(id);
+$("today").textContent = new Date().toLocaleDateString(undefined,{weekday:"short",month:"short",day:"numeric",year:"numeric"});
+function statusPill(s){return `<span class="pill ${s==="Occupied"||s==="Resolved"?"green":s==="Available"?"blue":s==="Urgent"||s==="High"?"red":"amber"}">${s}</span>`}
+function renderRooms(){
+ $("roomRows").innerHTML=rooms.slice(0,5).map(r=>`<tr><td class="room">${r.room}</td><td>${r.resident}</td><td>${statusPill(r.status)}</td><td>${r.block}</td></tr>`).join("");
+ $("allRoomRows").innerHTML=rooms.map((r,i)=>`<tr><td>${r.room}</td><td>${r.resident}</td><td>${statusPill(r.status)}</td><td>${r.block}</td><td><button class="btn secondary" onclick="cycleRoom(${i})">Change status</button></td></tr>`).join("");
+ const occupied=rooms.filter(r=>r.status==="Occupied").length;
+ $("totalRooms").textContent=rooms.length;$("occupiedRooms").textContent=occupied;$("availableRooms").textContent=rooms.filter(r=>r.status==="Available").length;
+ $("occupancy").textContent=Math.round(occupied/rooms.length*100)+"% occupied";
+}
+function cycleRoom(i){const statuses=["Occupied","Available","Cleaning"];rooms[i].status=statuses[(statuses.indexOf(rooms[i].status)+1)%statuses.length];if(rooms[i].status==="Available")rooms[i].resident="—";renderRooms();}
+function addRoom(){const room=prompt("Enter room number (e.g. C-04):");if(!room)return;rooms.push({room:room.trim(),resident:"—",status:"Available",block:room.trim().split("-")[0]||"Other"});renderRooms();}
+function renderChecklist(){
+ $("checklist").innerHTML=tasks.map((t,i)=>`<div class="action"><input type="checkbox" ${completed.has(i)?"checked":""} onchange="toggleTask(${i},this.checked)" aria-label="Complete ${t[0]}"><div><strong style="${completed.has(i)?"text-decoration:line-through;opacity:.6":""}">${t[0]}</strong><p>${t[1]}</p></div></div>`).join("");
+ $("checkCount").textContent=`${completed.size}/${tasks.length} done`;
+}
+function toggleTask(i,v){v?completed.add(i):completed.delete(i);renderChecklist();}
+function renderMaintenance(){
+ $("maintenanceList").innerHTML=maintenance.map((m,i)=>`<div class="action"><div class="dot" style="background:${m.priority==="Urgent"?"#e05252":m.priority==="High"?"#f59e0b":"#3559e0"}"></div><div style="flex:1"><strong>${m.location} · ${m.priority}</strong><p>${m.description}</p><div style="margin-top:7px">${statusPill(m.status)}</div></div>${m.status==="Open"?`<button class="btn secondary" onclick="resolveIssue(${i})">Resolve</button>`:""}</div>`).join("");
+ $("openIssues").textContent=maintenance.filter(m=>m.status==="Open").length;
+}
+function resolveIssue(i){maintenance[i].status="Resolved";renderMaintenance();}
+$("maintenanceForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);maintenance.unshift({location:f.get("location"),priority:f.get("priority"),description:f.get("description"),status:"Open"});e.target.reset();renderMaintenance();alert("Maintenance request added to this demo session.");});
+$("activityList").innerHTML=[
+ ["Room inspection completed","Block A common area checked.","#12a594"],
+ ["Maintenance request logged","Leaking tap · Block A, Room 08","#f59e0b"],
+ ["Check-in preparation","Room B-02 marked for cleaning.","#3559e0"]
+].map(a=>`<div class="action"><div class="dot" style="background:${a[2]}"></div><div><strong>${a[0]}</strong><p>${a[1]}</p></div></div>`).join("");
+function showSection(name){document.querySelectorAll(".section").forEach(s=>s.classList.toggle("active",s.id===name));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.section===name));const labels={overview:["OVERVIEW","Good morning, attendant 👋"],rooms:["ROOMS","Room management"],maintenance:["MAINTENANCE","Maintenance requests"],assistant:["AI ASSISTANT","How can I help today?"]};$("sectionName").textContent=labels[name][0];$("pageTitle").textContent=labels[name][1];}
+document.querySelectorAll(".nav button").forEach(b=>b.addEventListener("click",()=>showSection(b.dataset.section)));
+function addBubble(text,who){const b=document.createElement("div");b.className="bubble "+who;b.textContent=text;$("chatlog").appendChild(b);$("chatlog").scrollTop=$("chatlog").scrollHeight;return b;}
+async function sendPrompt(message){showSection("assistant");$("chatInput").value="";addBubble(message,"user");const waiting=addBubble("Thinking…","bot");$("aiStatus").textContent="Connecting to the AI assistant…";
+ try{const r=await fetch("/api/assistant",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message})});const data=await r.json();waiting.textContent=data.reply||data.error||"No response received.";if(!r.ok)$("aiStatus").textContent=data.error||"AI request failed.";else $("aiStatus").textContent="AI response ready. Please verify important information before acting.";}
+ catch(e){waiting.textContent="Could not connect to the server. Start the app with `npm start` and try again.";$("aiStatus").textContent="Server connection unavailable.";}
+}
+function quickPrompt(p){sendPrompt(p);}
+$("chatform").addEventListener("submit",e=>{e.preventDefault();const m=$("chatInput").value.trim();if(m)sendPrompt(m);});
+renderRooms();renderChecklist();renderMaintenance();
+</script>
+</body>
+</html>
